@@ -1,10 +1,21 @@
 version: '3.8'
+
 services:
-  app:
-    image: reactjs-app
-    container_name: reactjs-app
+  nodejs-app:
     build:
       context: .
       dockerfile: Dockerfile
+    image: farhad/nodejs-devops-app:latest
+    container_name: nodejs-devops-app
     ports:
-      - "9097:80"
+      - "8080:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:3000/healthz"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s

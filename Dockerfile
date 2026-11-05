@@ -1,33 +1,32 @@
-# Step 1: Use the official Node.js image as a base image
-FROM node:18 AS build
-
-# Step 2: Set the working directory
+# ---------- Stage 1: Build / Dependencies ----------
+FROM node:20-alpine AS builder
 WORKDIR /app
 
-#Clean and reinstall dependencies
-#rm -rf node_modules package-lock.json
-#npm cache clean --force
-
-# Step 3: Copy only package.json and package-lock.json (this helps in caching dependencies)
+# Copy package files first to leverage Docker layer caching
 COPY package*.json ./
+RUN npm ci --only=production
 
-# Step 4: Install dependencies (caching layer)
-RUN npm install
+# Copy application source
+COPY src ./src
 
-# Step 5: Copy the rest of the app source code
-COPY . .
+# ---------- Stage 2: Minimal runtime image ----------
+FROM node:20-alpine AS runtime
 
-# Step 6: Build the React app
-RUN npm run build
+# Create a non-root user & group
+RUN addgroup -S appgroup && adduser -S appuser -G appgroup
 
-# Step 7: Use a lighter image for serving the built app
-FROM nginx:alpine
+WORKDIR /app
 
-# Step 8: Copy the build files from the previous image into the nginx server
-COPY --from=build /app/build /usr/share/nginx/html
+# Copy only the built artifacts and node_modules from builder
+COPY --from=builder --chown=appuser:appgroup /app/node_modules ./node_modules
+COPY --from=builder --chown=appuser:appgroup /app/src ./src
+COPY --from=builder --chown=appuser:appgroup /app/package.json ./package.json
 
-# Step 9: Expose port 80 (nginx default port)
-EXPOSE 80
+# Switch to non-root user
+USER appuser
 
-# Step 10: Start nginx to serve the React app
-CMD ["nginx", "-g", "daemon off;"]
+# Expose application port
+EXPOSE 3000
+
+# Use exec form for proper signal handling
+CMD ["node", "src/index.js"]
