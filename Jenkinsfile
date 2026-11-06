@@ -7,7 +7,7 @@ pipeline {
         DOCKERHUB_NAMESPACE = 'alam1616'
         
         // Image Names
-        IMAGE = "${DOCKERHUB_NAMESPACE}/Care-guide-app"
+        IMAGE = "${DOCKERHUB_NAMESPACE}/care-guide-app"
                 
         // Build Number as Tag
         IMAGE_TAG = "${env.BUILD_NUMBER}"
