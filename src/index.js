@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Health endpoint
+// Root endpoint — required by task
 app.get('/', (req, res) => {
   res.status(200).json({
     message: 'Hello from DevOps Intern Task!',
@@ -10,7 +10,7 @@ app.get('/', (req, res) => {
   });
 });
 
-// Health check endpoint for Kubernetes / load balancers
+// Health-check endpoint for orchestrators
 app.get('/healthz', (req, res) => {
   res.status(200).json({ status: 'healthy' });
 });

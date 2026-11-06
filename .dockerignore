@@ -10,3 +10,8 @@ docs
 scripts
 .github
 README.md
+build
+public
+coverage
+.vscode
+.idea
