@@ -24,7 +24,7 @@ A minimal Node.js web app, containerized with Docker, built and published to Doc
 Requirements: Docker with the Compose plugin.
 
 ```bash
-docker compose up --build
+docker compose up --build -d
 ```
 
 (With the older standalone binary: `docker-compose up --build`.)
