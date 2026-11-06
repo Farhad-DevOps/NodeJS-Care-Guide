@@ -44,14 +44,12 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    dir('app') {
-                        sh """
-                            docker build -t ${IMAGE}:${IMAGE_TAG} .
-                            docker tag ${IMAGE}:${IMAGE_TAG} ${IMAGE}:${GIT_COMMIT_SHORT}
-                            docker tag ${IMAGE}:${IMAGE_TAG} ${IMAGE}:${LATEST_TAG}
-                            echo "✅ app image built: ${IMAGE}:${IMAGE_TAG}"
+                    sh """
+                       docker build -t ${IMAGE}:${IMAGE_TAG} .
+                       docker tag ${IMAGE}:${IMAGE_TAG} ${IMAGE}:${GIT_COMMIT_SHORT}
+                       docker tag ${IMAGE}:${IMAGE_TAG} ${IMAGE}:${LATEST_TAG}
+                       echo "✅ app image built: ${IMAGE}:${IMAGE_TAG}"
                         """
-                    }
                 }
             }
         }
