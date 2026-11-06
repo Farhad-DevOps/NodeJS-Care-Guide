@@ -21,7 +21,7 @@ pipeline {
         // ==================== BUILD STAGE ====================
         stage('Pull Code') {
             steps {
-                git branch: 'master', credentialsId: 'GitHub_pass', url: 'https://github.com/Farhad-DevOps/Hydrus-Digital-App-CI-CD.git'
+                git branch: 'master', credentialsId: 'GitHub_pass', url: 'https://github.com/Farhad-DevOps/NodeJS-Care-Guide.git'
             }
         }
        
